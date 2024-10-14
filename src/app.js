@@ -2,23 +2,29 @@ require('dotenv').config();
 const express = require('express');
 const passport = require('passport');
 const session = require('express-session');
-const pool = require('./db');
+const jwt = require('jsonwebtoken');
+
+const apiMoviesRouter = require('./routes/apiMovies.router');
+const sessionRouter = require('./routes/apiSession.router');
 
 const app = express();
 
-app.use('/', (req, res) => {
-	res.send('Hello World');
-});
+app.use(express.json());
+app.use(express.urlencoded({ extended: true }));
 
-app.get('/users', async (req, res) => {
-	try {
-		const [rows] = await pool.query('SELECT * FROM users');
-		res.json(rows);
-	} catch (err) {
-		console.error(err);
-		res.status(500).json({ error: 'Internal Server Error' });
-	}
-});
+app.use(
+	session({
+		secret: process.env.SESSION_SECRET,
+		resave: false,
+		saveUninitialized: true,
+	})
+);
+
+app.use(passport.initialize());
+app.use(passport.session());
+		
+app.use('/api/movies', apiMoviesRouter)
+app.use('/api/session', sessionRouter)
 
 const PORT = process.env.PORT || 3000;
 
