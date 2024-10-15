@@ -10,6 +10,16 @@ class SessionService {
       throw error;
     }
   }
+
+  async loginUser(email) {
+    try {
+      const [result] = await pool.query('SELECT * FROM users WHERE email = ?', [email]);
+      return result;
+    } catch (error) {
+      console.error(error);
+      throw error;
+    }
+  }
 }
 
 module.exports = new SessionService();

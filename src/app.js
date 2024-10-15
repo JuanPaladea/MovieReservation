@@ -2,10 +2,9 @@ require('dotenv').config();
 const express = require('express');
 const passport = require('passport');
 const session = require('express-session');
-const jwt = require('jsonwebtoken');
 
 const apiMoviesRouter = require('./routes/apiMovies.router');
-const sessionRouter = require('./routes/apiSession.router');
+const apiSessionRouter = require('./routes/apiSession.router');
 
 const app = express();
 
@@ -24,7 +23,7 @@ app.use(passport.initialize());
 app.use(passport.session());
 		
 app.use('/api/movies', apiMoviesRouter)
-app.use('/api/session', sessionRouter)
+app.use('/api/session', apiSessionRouter)
 
 const PORT = process.env.PORT || 3000;
 

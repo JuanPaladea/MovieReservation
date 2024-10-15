@@ -10,6 +10,19 @@ const getMovies = async (req, res) => {
   }
 }
 
+const addMovie = async (req, res) => {
+  const { title, description, release_date } = req.body;
+
+  try {
+    const result = await moviesService.addMovie(title, description, release_date);
+    res.status(201).send({status: 'success', data: result});
+  } catch (error) {
+    console.error(error);
+    res.status(500).send({status: 'error', message: error.message});
+  }
+}
+
 module.exports = {
-  getMovies
+  getMovies,
+  addMovie
 };
