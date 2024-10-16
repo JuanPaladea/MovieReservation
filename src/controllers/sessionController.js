@@ -5,6 +5,17 @@ const sessionService = require('../services/sessionService');
 
 const registerUser = async (req, res) => {
   const { username, email, password } = req.body;
+
+  //REGEX FOR EMAIL
+  if (!/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(email)) {
+    return res.status(400).send({status: 'error', message: 'Invalid email'});
+  }
+
+  //REGEX FOR PASSWORD
+  if (!/^(?=.*[A-Za-z])(?=.*\d)[A-Za-z\d]{8,}$/.test(password)) {
+    return res.status(400).send({status: 'error', message: 'Password must contain at least 8 characters, one letter and one number'});
+  }
+
   const hashedPassword = await bcrypt.hash(password, 10);
 
   try {

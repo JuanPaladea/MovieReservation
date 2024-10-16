@@ -10,18 +10,6 @@ const getShowtimes = async (req, res) => {
   }
 }
 
-const getShowtimeId = async (req, res) => {
-  const { movieId, showtimeDate } = req.body;
-
-  try {
-    const result = await showtimesService.getShowTimeId(movieId, showtimeDate);
-    res.status(200).send({status: 'success', data: result});
-  } catch (error) {
-    console.error(error);
-    res.status(500).send({status: 'error', message: error.message});
-  }
-} 
-
 const addShowtime = async (req, res) => {
   const { movieId, showtimeDate } = req.body;
 
@@ -36,6 +24,5 @@ const addShowtime = async (req, res) => {
 
 module.exports = {
   getShowtimes,
-  getShowtimeId,
   addShowtime
 };

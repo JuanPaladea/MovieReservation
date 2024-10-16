@@ -5,6 +5,8 @@ const session = require('express-session');
 
 const apiMoviesRouter = require('./routes/apiMovies.router');
 const apiSessionRouter = require('./routes/apiSession.router');
+const apiReservationsRouter = require('./routes/apiReservations.router');
+const apiShowtimesRouter = require('./routes/apiShowtimes.router');
 
 const app = express();
 
@@ -24,6 +26,8 @@ app.use(passport.session());
 		
 app.use('/api/movies', apiMoviesRouter)
 app.use('/api/session', apiSessionRouter)
+app.use('/api/reservations', apiReservationsRouter)
+app.use('/api/showtimes', apiShowtimesRouter)
 
 const PORT = process.env.PORT || 3000;
 
