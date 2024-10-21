@@ -1,6 +1,5 @@
 require('dotenv').config();
 const express = require('express');
-const passport = require('passport');
 const session = require('express-session');
 
 const apiMoviesRouter = require('./routes/apiMovies.router');
@@ -20,9 +19,6 @@ app.use(
 		saveUninitialized: true,
 	})
 );
-
-app.use(passport.initialize());
-app.use(passport.session());
 		
 app.use('/api/movies', apiMoviesRouter)
 app.use('/api/session', apiSessionRouter)
