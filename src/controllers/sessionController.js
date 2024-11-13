@@ -31,17 +31,16 @@ const loginUser = async (req, res) => {
   const { email, password } = req.body;
 
   try {
-    const [user] = await sessionService.loginUser(email);
+    const user = await sessionService.loginUser(email);
     if (!user) {
       return res.status(404).send({status: 'error', message: 'User not found'});
     }
-
     const isPasswordValid = await bcrypt.compare(password, user.password);
     if (!isPasswordValid) {
       return res.status(401).send({status: 'error', message: 'Invalid password'});
     }
 
-    const token = jwt.sign({id: user.id, email: user.email}, process.env.JWT_SECRET, {expiresIn: '1h'});
+    const token = jwt.sign({id: user.user_id, email: user.email}, process.env.JWT_SECRET, {expiresIn: '1h'});
     res.status(200).send({status: 'success', data: {token}});
   } catch (error) {
     console.error(error);

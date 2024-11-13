@@ -3,7 +3,7 @@ const pool = require('../db');
 class SessionService {
   async registeUser(username, email, password) {
     try {
-      const [result] = await pool.query('INSERT INTO users (username, email, password) VALUES (?, ?, ?)', [username, email, password]);
+      const result = await pool.query('INSERT INTO users (username, email, password) VALUES ($1, $2, $3) RETURNING *', [username, email, password]);
       return result;
     } catch (error) {
       console.error(error);
@@ -13,8 +13,8 @@ class SessionService {
 
   async loginUser(email) {
     try {
-      const [result] = await pool.query('SELECT * FROM users WHERE email = ?', [email]);
-      return result;
+      const result = await pool.query('SELECT * FROM users WHERE email = $1', [email]);
+      return result.rows[0];
     } catch (error) {
       console.error(error);
       throw error;
