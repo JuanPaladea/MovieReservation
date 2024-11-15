@@ -129,7 +129,7 @@ class reservationsService {
 
   async countShowtimeReservations(showtimeId) {
     try {
-      const result = await pool.query('SELECT COUNT(*) FROM reservations WHERE showtime_id = $1 AND status = "reserved"', [showtimeId]);
+      const result = await pool.query('SELECT COUNT(*) FROM reservations WHERE showtime_id = $1 AND status = \'reserved\'', [showtimeId]);
       return parseInt(result.rows[0].count);
     } catch (error) {
       console.error(error);

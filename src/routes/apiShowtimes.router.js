@@ -5,10 +5,10 @@ const authToken = require('../middlewares/authToken');
 const router = require('express').Router();
 
 router.get('/', authToken, getShowtimes);
+router.post('/', authToken, adminAuth, addShowtime);
 router.get('/:showtimeId', authToken, getShowtimeById);
+router.delete('/:showtimeId', authToken, adminAuth, deleteShowtime);
 router.get('/movie/:movieId', authToken, getMovieShowtimes);
 router.get('/upcoming/:movieId', authToken, getUpcomingMovieShowtimes);
-router.post('/', authToken, adminAuth, addShowtime);
-router.delete('/delete/:showtimeId', authToken, adminAuth, deleteShowtime);
 
 module.exports = router;

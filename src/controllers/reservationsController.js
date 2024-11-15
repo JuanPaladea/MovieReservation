@@ -2,8 +2,7 @@ const reservationsService = require('../services/reservationsService');
 
 const addReservation = async (req, res) => {
   const userId = req.user.id;
-  const showtimeId = req.params.showtimeId;
-  const { seatNumbers } = req.body;
+  const { seatNumbers, showtimeId } = req.body;
 
   try {
     for (const seatNumber of seatNumbers) {
@@ -33,7 +32,7 @@ const getReservations = async (req, res) => {
 }
 
 const getReservationById = async (req, res) => {
-  const reservationId = req.params.id;
+  const reservationId = req.params.reservationId;
 
   try {
     const result = await reservationsService.getReservationById(reservationId);
@@ -49,7 +48,7 @@ const getReservationById = async (req, res) => {
 }
 
 const getUserReservations = async (req, res) => {
-  const userId = req.params.id;
+  const userId = req.params.userId;
 
   try {
     const result = await reservationsService.getUserReservations(userId);
@@ -61,7 +60,7 @@ const getUserReservations = async (req, res) => {
 }
 
 const getShowtimeReservations = async (req, res) => {
-  const showtimeId = req.params.id;
+  const showtimeId = req.params.showtimeId;
 
   try {
     const result = await reservationsService.getShowtimeReservations(showtimeId);
@@ -73,8 +72,9 @@ const getShowtimeReservations = async (req, res) => {
 }
 
 const checkSeatAvailability = async (req, res) => {
-  const showtimeId = req.params.id;
+  const showtimeId = req.params.showtimeId;
   const seatNumber = req.query.seatNumber;
+  console.log(showtimeId, seatNumber)
   try {
     const result = await reservationsService.checkSeatAvailability(showtimeId, seatNumber);
     res.status(200).send({status: 'success', available: result});
@@ -85,7 +85,7 @@ const checkSeatAvailability = async (req, res) => {
 }
 
 const updateReservationStatus = async (req, res) => {
-  const reservationId = req.params.id;
+  const reservationId = req.params.reservationId;
   const { status } = req.body;
 
   if (!['reserved', 'cancelled'].includes(status)) {
@@ -102,7 +102,7 @@ const updateReservationStatus = async (req, res) => {
 }
 
 const deleteReservation = async (req, res) => {
-  const reservationId = req.params.id;
+  const reservationId = req.params.reservationId;
 
   try {
     const result = await reservationsService.deleteReservation(reservationId);
@@ -114,7 +114,7 @@ const deleteReservation = async (req, res) => {
 }
 
 const countShowtimeReservations = async (req, res) => {
-  const showtimeId = req.params.id;
+  const showtimeId = req.params.showtimeId;
 
   try {
     const result = await reservationsService.countShowtimeReservations(showtimeId);

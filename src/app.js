@@ -1,6 +1,9 @@
 require('dotenv').config();
 const express = require('express');
 const session = require('express-session');
+const swaggerJSDoc = require('swagger-jsdoc');
+const swaggerUi = require('swagger-ui-express');
+const path = require('path')
 
 const apiMoviesRouter = require('./routes/apiMovies.router');
 const apiSessionRouter = require('./routes/apiSession.router');
@@ -19,7 +22,38 @@ app.use(
 		saveUninitialized: true,
 	})
 );
-		
+
+const swaggerOptions = {
+  definition: {
+    openapi: "3.0.0",
+    info: {
+      title: "MovieReservation API",
+      version: "1.0.0",
+      description: "Movie Reservation API",
+    },
+    components: {
+      securitySchemes: {
+        bearerAuth: {
+          type: 'http',
+          scheme: 'bearer',
+          bearerFormat: 'JWT',
+        },
+      },
+    },
+    security: [
+      {
+        bearerAuth: [],
+      },
+    ],
+  },
+  apis: [path.join(__dirname, './docs/**/*.yaml')],
+};
+
+const swaggerSpec = swaggerJSDoc(swaggerOptions);
+app.use('/api-docs', swaggerUi.serve, swaggerUi.setup(swaggerSpec));
+app.use('/', (req, res) => {
+  res.redirect('/api-docs');
+});
 app.use('/api/movies', apiMoviesRouter)
 app.use('/api/session', apiSessionRouter)
 app.use('/api/reservations', apiReservationsRouter)
@@ -28,5 +62,5 @@ app.use('/api/showtimes', apiShowtimesRouter)
 const PORT = process.env.PORT || 3000;
 
 app.listen(PORT, () => {
-	console.log(`Server is running on port ${PORT}`, 'http://localhost:3000');
+	console.log(`Server is running on port ${PORT}`, `http://localhost:${PORT}`);
 }); 

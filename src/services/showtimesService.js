@@ -4,7 +4,7 @@ class ShowtimesService {
   async getShowtimes() {
     try {
       const result = await pool.query('SELECT * FROM showtimes');
-      return result;
+      return result.rows;
     } catch (error) {
       console.error(error);
       throw error;
