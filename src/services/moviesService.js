@@ -14,7 +14,7 @@ class MoviesService {
 
   async getMovieById(id) {
     try {
-      const query = 'SELECT * FROM movies WHERE id = $1';
+      const query = 'SELECT * FROM movies WHERE movie_id = $1';
       const result = await pool.query(query, [id]);
       return result.rows[0];
     } catch (error) {
@@ -36,7 +36,7 @@ class MoviesService {
 
   async deleteMovie(id) {
     try {
-      const query = 'DELETE FROM movies WHERE id = $1 RETURNING *';
+      const query = 'DELETE FROM movies WHERE movie_id = $1 RETURNING *';
       const result = await pool.query(query, [id]);
       return result.rows[0];
     } catch (error) {

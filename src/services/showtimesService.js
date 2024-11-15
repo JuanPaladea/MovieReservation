@@ -11,10 +11,20 @@ class ShowtimesService {
     }
   }
 
+  async getShowtimeById(showtimeId) {
+    try {
+      const result = await pool.query('SELECT * FROM showtimes WHERE showtime_id = $1', [showtimeId]);
+      return result.rows[0];
+    } catch (error) {
+      console.error(error);
+      throw error;
+    }
+  }
+
   async getMovieShowtimes(movieId) {
     try {
       const result = await pool.query('SELECT * FROM showtimes WHERE movie_id = $1 ORDER BY show_date ASC', [movieId]);
-      return result;
+      return result.rows;
     } catch (error) {
       console.error(error);
       throw error;
@@ -24,7 +34,7 @@ class ShowtimesService {
   async getUpcomingMovieShowtimes(movieId) {
     try {
       const result = await pool.query('SELECT * FROM showtimes WHERE movie_id = $1 AND show_date >= CURRENT_DATE ORDER BY show_date ASC', [movieId]);
-      return result;
+      return result.rows;
     } catch (error) {
       console.error(error);
       throw error;
