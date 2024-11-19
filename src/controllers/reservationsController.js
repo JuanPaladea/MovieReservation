@@ -2,12 +2,12 @@ const reservationsService = require('../services/reservationsService');
 
 const addReservation = async (req, res) => {
   const userId = req.user.id;
-  const { seatNumbers, showtimeId } = req.body;
+  const { seatIds } = req.body;
 
   try {
-    for (const seatNumber of seatNumbers) {
+    for (const seatId of seatIds) {
       // check availability
-      const isAvailable = await reservationsService.checkSeatAvailability(showtimeId, seatNumber);
+      const isAvailable = await reservationsService.checkSeatAvailability(seatId);
       if (!isAvailable) {
         return res.status(400).send({status: 'error', message: `Seat ${seatNumber} is already reserved`});
       }

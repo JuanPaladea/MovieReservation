@@ -1,35 +1,5 @@
 const pool = require('../db')
 
-// DO $$
-// DECLARE
-//   movie_id integer; -- Declare movie_id variable
-//   movie_ids integer[] := ARRAY[1, 2, 3]; -- Define the 3 movie IDs for the batch
-//   show_time1 time := '14:00:00'; -- First show time
-//   show_time2 time := '18:00:00'; -- Second show time
-//   show_date date := '2024-11-25'; -- Set the show date to 25-11-2024
-//   screen_number integer; -- Variable for screen number
-//   available_seats integer := 20; -- Default number of available seats, adjust as necessary
-//   i integer;
-// BEGIN
-//   -- Loop through the 3 movie IDs
-//   FOR i IN 1..3 LOOP
-//     -- Get the movie_id from the array for the current loop
-//     movie_id := movie_ids[i];
-
-//     -- Set the screen number for each movie: starting from 1 and incrementing by 1
-//     screen_number := i; 
-
-//     -- Insert the first showtime for the movie
-//     INSERT INTO showtimes (movie_id, show_date, show_time, screen_number, available_seats, created_at)
-//     VALUES (movie_id, show_date, show_time1, screen_number, available_seats, CURRENT_TIMESTAMP);
-
-//     -- Insert the second showtime for the movie
-//     INSERT INTO showtimes (movie_id, show_date, show_time, screen_number, available_seats, created_at)
-//     VALUES (movie_id, show_date, show_time2, screen_number, available_seats, CURRENT_TIMESTAMP);
-//   END LOOP;
-// END $$;
-
-
 class reservationsService {
   async addReservation(userId, showtimeId, seatNumbers) {
     try {
