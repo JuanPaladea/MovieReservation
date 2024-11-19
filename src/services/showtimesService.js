@@ -41,9 +41,22 @@ class ShowtimesService {
     }
   }
 
-  async addShowtime(movieId, showDate, show_time, screen_number, available_seats) {
+  async addShowtime(movieId, hallId, show_date, show_time) {
     try {
-      const result = await pool.query('INSERT INTO showtimes (movie_id, show_date, show_time, screen_number, available_seats) VALUES ($1, $2, $3, $4, $5) RETURNING *', [movieId, showDate, show_time, screen_number, available_seats]);
+      // Step 1: Get the hall's seat configuration (total rows and seats per row)
+      const hallResult = await pool.query('SELECT total_rows, seat_per_row FROM halls WHERE hall_id = $1', [hallId]);
+      const hall = hallResult.rows[0];
+      const { total_rows, seat_per_row } = hall;
+
+      // Step 2: Insert the new showtime
+      const result = await pool.query('INSERT INTO showtimes (movie_id, hall_id, show_date, show_time) VALUES ($1, $2, $3, $4) RETURNING *', [movieId, hallId, show_date, show_time]);
+
+      // Step 3: Insert seats for the showtime
+      for (let row = 1; row <= total_rows; row++) {
+        for (let seat = 1; seat <= seat_per_row; seat++) {
+          await pool.query('INSERT INTO seats (showtime_id, row_number, seat_number) VALUES ($1, $2, $3)', [result.rows[0].showtime_id, row, seat]);
+        }
+      }
       return result.rows[0];
     } catch (error) {
       console.error(error);
