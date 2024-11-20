@@ -50,18 +50,15 @@ paths:
                 movieId:
                   type: string
                   description: The id of the movie
+                hallId:
+                  type: string
+                  description: The id of the hall
                 showDate:
                   type: string
                   description: The date of the showtime
                 showTime:
-                  type: string
+                  type: integer
                   description: The time of the showtime
-                screenNumber:
-                  type: integer
-                  description: The screen number of the showtime
-                availableSeats:
-                  type: integer
-                  description: The available seats of the showtime
       responses:
         '201':
           description: Showtime created

@@ -1,36 +1,31 @@
 const pool = require('../db')
 
 class reservationsService {
-  async addReservation(userId, showtimeId, seatNumbers) {
+  async getReservations() {
     try {
-      // Construct the values string for the INSERT query
-      const values = seatNumbers.map((seatNumber, index) => `($1, $2, $${index + 3})`).join(', ');
-      const query = `INSERT INTO reservations (user_id, showtime_id, seat_number) VALUES ${values} RETURNING *`;
-      const params = [userId, showtimeId, ...seatNumbers];
-
-      // Insert the reservations
-      const reservationResult = await pool.query(query, params);
-
-      // Update the available seats in the showtimes table
-      const seatTotal = seatNumbers.length;
-      const updateSeatsQuery = 'UPDATE showtimes SET available_seats = available_seats - $1 WHERE showtime_id = $2 RETURNING *';
-      const updateSeatsResult = await pool.query(updateSeatsQuery, [seatTotal, showtimeId]);
-
-      // Return the inserted reservations and updated showtime
-      return {
-        reservations: reservationResult.rows,
-        updatedShowtime: updateSeatsResult.rows[0]
-      };
+      const result = await pool.query('SELECT * FROM reservations ORDER BY reservation_date ASC');
+      return result.rows;
     } catch (error) {
       console.error(error);
       throw error;
     }
   }
 
-  async getReservations() {
+  async addReservation(userId, seatIds) {
     try {
-      const result = await pool.query('SELECT * FROM reservations ORDER BY reservation_date ASC');
-      return result.rows;
+      // Add reservation
+      const reservationPromises = seatIds.map(seatId => 
+        pool.query('INSERT INTO reservations (user_id, seat_id) VALUES ($1, $2) RETURNING *', [userId, seatId])
+      );
+      const result = await Promise.all(reservationPromises);
+
+      // Update seats status to reserved
+      const updatePromises = seatIds.map(seatId => 
+        pool.query('UPDATE seats SET status = $1 WHERE seat_id = $2', ['reserved', seatId])
+      );
+      await Promise.all(updatePromises);
+
+      return result;
     } catch (error) {
       console.error(error);
       throw error;
@@ -55,58 +50,40 @@ class reservationsService {
       console.error(error);
       throw error;
     }
+  }  
+
+  async deleteReservation(reservationId) {
+    try {
+      // Delete reservation
+      const result = await pool.query('UPDATE reservations SET status = $1 WHERE reservation_id = $2 RETURNING *', ['canceled', reservationId]);
+
+      if (result.rows.length === 0) {
+        return 'Reservation not found';
+      }
+
+      // Update seats status to available
+      const updateSeats = await pool.query('UPDATE seats SET status = $1 WHERE seat_id = $2 RETURNING *', ['available', result.rows[0].seat_id]);
+
+      if (updateSeats.rows.length === 0) {
+        return 'Seat not found';
+      }
+
+      return `${result.rows[0].reservation_id} deleted, seat status updated to ${updateSeats.rows[0].status}`;
+    } catch (error) {
+      console.error(error);
+      throw error;
+    }
   }
 
   async getShowtimeReservations(showtimeId) {
     try {
-      const result = await pool.query('SELECT * FROM reservations WHERE showtime_id = $1 ORDER BY reservation_date ASC', [showtimeId]);
+      const result = await pool.query('SELECT reservations.*, seats.*, showtimes.* FROM reservations JOIN seats ON reservations.seat_id = seats.seat_id JOIN showtimes ON seats.showtime_id = showtimes.showtime_id WHERE seats.showtime_id = $1;', [showtimeId]);
       return result.rows;
     } catch (error) {
       console.error(error);
       throw error;
     }
   }
-
-  async checkSeatAvailability(showtimeId, seat_number) {
-    try {
-      const result = await pool.query('SELECT * FROM reservations WHERE showtime_id = $1 AND seat_number = $2', [showtimeId, seat_number]);
-      return result.rows.length === 0;
-    } catch (error) {
-      console.error(error);
-      throw error;
-    }
-  }
-
-  async updateReservationStatus(reservationId, status) {
-    try {
-      const result = await pool.query('UPDATE reservations SET status = $1 WHERE reservation_id = $2 RETURNING *', [status, reservationId]);
-      return result.rows[0];
-    } catch (error) {
-      console.error(error);
-      throw error;
-    }
-  }
-
-  async deleteReservation(reservationId) {
-    try {
-      const result = await pool.query('DELETE FROM reservations WHERE reservation_id = $1 RETURNING *', [reservationId]);
-      return result.rows[0];
-    } catch (error) {
-      console.error(error);
-      throw error;
-    }
-  }
-
-  async countShowtimeReservations(showtimeId) {
-    try {
-      const result = await pool.query('SELECT COUNT(*) FROM reservations WHERE showtime_id = $1 AND status = \'reserved\'', [showtimeId]);
-      return parseInt(result.rows[0].count);
-    } catch (error) {
-      console.error(error);
-      throw error;
-    }
-  }
-  
 }
 
 module.exports = new reservationsService();

@@ -9,6 +9,8 @@ const apiMoviesRouter = require('./routes/apiMovies.router');
 const apiSessionRouter = require('./routes/apiSession.router');
 const apiReservationsRouter = require('./routes/apiReservations.router');
 const apiShowtimesRouter = require('./routes/apiShowtimes.router');
+const apiSeatsRouter = require('./routes/apiSeats.router');
+const apiHallsRouter = require('./routes/apiHalls.router');
 
 const app = express();
 
@@ -51,13 +53,16 @@ const swaggerOptions = {
 
 const swaggerSpec = swaggerJSDoc(swaggerOptions);
 app.use('/api-docs', swaggerUi.serve, swaggerUi.setup(swaggerSpec));
-app.use('/', (req, res) => {
-  res.redirect('/api-docs');
-});
 app.use('/api/movies', apiMoviesRouter)
 app.use('/api/session', apiSessionRouter)
 app.use('/api/reservations', apiReservationsRouter)
 app.use('/api/showtimes', apiShowtimesRouter)
+app.use('/api/seats', apiSeatsRouter)
+app.use('/api/halls', apiHallsRouter)
+
+app.use('/', (req, res) => {
+  res.redirect('/api-docs');
+});
 
 const PORT = process.env.PORT || 3000;
 
