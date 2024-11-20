@@ -50,6 +50,7 @@ paths:
                 seatIds:
                   type: array
                   description: The IDs of seats to reserve
+                  example: [1, 2, 3]
       responses:
         '201':
           description: Reservation created
