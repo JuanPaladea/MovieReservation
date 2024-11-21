@@ -11,10 +11,10 @@ const getMovies = async (req, res) => {
 }
 
 const addMovie = async (req, res) => {
-  const { title, genre, duration, rating, release_date, description} = req.body;
+  const { title, genre, duration, rating, release_date, description, thumbnails} = req.body;
 
   try {
-    const result = await moviesService.addMovie(title, genre, duration, rating, description, release_date);
+    const result = await moviesService.addMovie(title, genre, duration, rating, description, release_date, thumbnails);
     res.status(201).send({status: 'success', data: result});
   } catch (error) {
     console.error(error);

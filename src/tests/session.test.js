@@ -1,12 +1,13 @@
 const supertest = require('supertest');
 const {faker} = require('@faker-js/faker');
 
-const app = "http://localhost:3000";
+const app = "http://localhost:4000";
 const request = supertest(app);
 
 let username = faker.internet.username();
 let email = faker.internet.email();
-let password = faker.internet.password();
+
+let userId
 
 describe('Session', () => {
   it('should register a user', async () => {
@@ -15,8 +16,9 @@ describe('Session', () => {
       .send({
         username: username,
         email: email,
-        password: password})
+        password: "Test1234"})
 
+    userId = response.body.data.user_id
     expect(response.status).toBe(201);
     expect(response.body.status).toBe('success');
   });
@@ -27,7 +29,7 @@ describe('Session', () => {
       .send({
         username: username,
         email: 'invalidemail',
-        password: password})
+        password: "Test1234"})
 
     expect(response.status).toBe(400);
     expect(response.body.status).toBe('error');
@@ -51,7 +53,7 @@ describe('Session', () => {
       .send({
         username: username,
         email: email,
-        password: password})
+        password: "Test1234"})
 
     expect(response.status).toBe(400);
     expect(response.body.status).toBe('error');
@@ -62,8 +64,8 @@ describe('Session', () => {
       .post('/api/session/login')
       .send({
         email: email,
-        password: password})
-
+        password: "Test1234"})
+    
     expect(response.status).toBe(200);
     expect(response.body.status).toBe('success');
   });
@@ -73,7 +75,7 @@ describe('Session', () => {
       .post('/api/session/login')
       .send({
         email: 'invalidemail',
-        password: password})
+        password: "Test1234"})
 
     expect(response.status).toBe(400);
     expect(response.body.status).toBe('error');
@@ -99,5 +101,21 @@ describe('Session', () => {
 
     expect(response.status).toBe(400);
     expect(response.body.status).toBe('error');
+  });
+
+  it('should delete a user', async () => {
+    const token = await request
+      .post('/api/session/login')
+      .send({
+        email: "test@email.com",
+        password: "Test1234"})
+      .then(response => response.body.data.token)
+       
+    const response = await request
+      .delete(`/api/session/${userId}`)
+      .set('Authorization', `Bearer ${token}`)
+
+    expect(response.status).toBe(200);
+    expect(response.body.status).toBe('success');
   });
 })

@@ -23,10 +23,10 @@ class MoviesService {
     }
   }
 
-  async addMovie(title, genre, duration, rating, description, release_date) {
+  async addMovie(title, genre, duration, rating, description, release_date, thumbnails) {
     try {
-      const query = 'INSERT INTO movies (title, genre, duration, rating, description, release_date) VALUES ($1, $2, $3, $4, $5, $6) RETURNING *';
-      const result = await pool.query(query, [title, genre, duration, rating, description, release_date]);
+      const query = 'INSERT INTO movies (title, genre, duration, rating, description, release_date, thumbnails) VALUES ($1, $2, $3, $4, $5, $6, $7) RETURNING *';
+      const result = await pool.query(query, [title, genre, duration, rating, description, release_date, thumbnails]);
       return result.rows[0];
     } catch (error) {
       console.error(error);
