@@ -20,6 +20,16 @@ class SessionService {
       throw error;
     }
   }
+
+  async deleteUser(userId) {
+    try {
+      const result = await pool.query('DELETE FROM users WHERE user_id = $1 RETURNING *', [userId]);
+      return result;
+    } catch (error) {
+      console.error(error);
+      throw error;
+    }
+  }
 }
 
 module.exports = new SessionService();

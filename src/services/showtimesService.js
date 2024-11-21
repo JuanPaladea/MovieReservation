@@ -21,7 +21,7 @@ class ShowtimesService {
     }
   }
 
-  async addShowtime(movieId, hallId, show_date, show_time) {
+  async addShowtime(movieId, hallId, show_date, show_time, price) {
     try {
       // Step 1: Get the hall's seat configuration (total rows and seats per row)
       const hallResult = await pool.query('SELECT total_rows, seats_per_row FROM halls WHERE hall_id = $1', [hallId]);
@@ -29,7 +29,7 @@ class ShowtimesService {
       const { total_rows, seats_per_row } = hall;
 
       // Step 2: Insert the new showtime
-      const result = await pool.query('INSERT INTO showtimes (movie_id, hall_id, show_date, show_time) VALUES ($1, $2, $3, $4) RETURNING *', [movieId, hallId, show_date, show_time]);
+      const result = await pool.query('INSERT INTO showtimes (movie_id, hall_id, show_date, show_time, price) VALUES ($1, $2, $3, $4. $5) RETURNING *', [movieId, hallId, show_date, show_time, price]);
 
       // Step 3: Insert seats for the showtime
       for (let row = 1; row <= total_rows; row++) {

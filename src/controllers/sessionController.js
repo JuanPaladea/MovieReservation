@@ -10,6 +10,10 @@ const registerUser = async (req, res) => {
   if (!/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(email)) {
     return res.status(400).send({status: 'error', message: 'Invalid email'});
   }
+  //REGEX FOR PASSWORD
+  if (!/^(?=.*[A-Za-z])(?=.*\d)[A-Za-z\d]{8,}$/.test(password)) {
+    return res.status(400).send({status: 'error', message: 'Password must contain at least 8 characters, one letter and one number'});
+  }
 
   try {
     const user = await sessionService.getUserByEmail(email);
@@ -19,11 +23,6 @@ const registerUser = async (req, res) => {
   } catch (error) {
     console.error(error);
     res.status(500).send({status: 'error', message: error.message});
-  }
-
-  //REGEX FOR PASSWORD
-  if (!/^(?=.*[A-Za-z])(?=.*\d)[A-Za-z\d]{8,}$/.test(password)) {
-    return res.status(400).send({status: 'error', message: 'Password must contain at least 8 characters, one letter and one number'});
   }
 
   const hashedPassword = await bcrypt.hash(password, 10);
@@ -40,15 +39,20 @@ const registerUser = async (req, res) => {
 const loginUser = async (req, res) => {
   const { email, password } = req.body;
 
+  //REGEX FOR EMAIL
+  if (!/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(email)) {
+    return res.status(400).send({status: 'error', message: 'Invalid email'});
+  }
+
   try {
     const user = await sessionService.getUserByEmail(email);
     if (!user) {
-      return res.status(404).send({status: 'error', message: 'User not found'});
+      return res.status(400).send({status: 'error', message: 'User not found'});
     }
     
     const isPasswordValid = await bcrypt.compare(password, user.password);
     if (!isPasswordValid) {
-      return res.status(401).send({status: 'error', message: 'Invalid password'});
+      return res.status(400).send({status: 'error', message: 'Invalid password'});
     }
 
     const token = jwt.sign({id: user.user_id, email: user.email, role: user.role}, process.env.JWT_SECRET, {expiresIn: '1h'});
@@ -59,7 +63,23 @@ const loginUser = async (req, res) => {
   }
 }
 
+const deleteUser = async (req, res) => {
+  const userId = req.params.userId;
+
+  try {
+    const result = await sessionService.deleteUser(userId);
+    if (result.rowCount === 0) {
+      return res.status(404).send({status: 'error', message: 'User not found'});
+    }
+    res.status(200).send({status: 'success', message: 'User deleted successfully'});
+  } catch (error) {
+    console.error(error);
+    res.status(500).send({status: 'error', message: error.message});
+  }
+}
+
 module.exports = {
   registerUser,
-  loginUser
+  loginUser,
+  deleteUser
 };
