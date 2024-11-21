@@ -47,7 +47,7 @@ describe('Movies', () => {
         rating: faker.number.int(100),
         description: faker.lorem.sentence(),
         release_date: faker.date.recent(),
-        thumnails: faker.image.imageUrl()
+        thumnails: faker.image.url()
       })
 
     movieId = response.body.data.movie_id

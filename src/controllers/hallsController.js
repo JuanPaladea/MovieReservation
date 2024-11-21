@@ -10,10 +10,10 @@ const getHalls = async (req, res) => {
 }
 
 const getHallById = async (req, res) => {
-  const { id } = req.params;
+  const { hallId } = req.params;
 
   try {
-    const hall = await hallService.getHallById(id);
+    const hall = await hallService.getHallById(hallId);
     res.status(200).json({ status: 'success', data: hall });
   } catch (error) {
     res.status(500).json({ error: error.message });
@@ -32,11 +32,11 @@ const addHall = async (req, res) => {
 }
 
 const updateHall = async (req, res) => {
-  const { id } = req.params;
+  const { hallId } = req.params;
   const { name, total_rows, seats_per_row } = req.body;
 
   try {
-    const result = await hallService.updateHall(id, name, total_rows, seats_per_row);
+    const result = await hallService.updateHall(hallId, name, total_rows, seats_per_row);
     res.status(200).json({ status: 'success', data: result });
   } catch (error) {
     res.status(500).json({ error: error.message });
@@ -44,10 +44,10 @@ const updateHall = async (req, res) => {
 }
 
 const deleteHall = async (req, res) => {
-  const { id } = req.params;
+  const { hallId } = req.params;
 
   try {
-    const result = await hallService.deleteHall(id);
+    const result = await hallService.deleteHall(hallId);
     res.status(200).json({ status: 'success', data: result });
   } catch (error) {
     res.status(500).json({ error: error.message });
