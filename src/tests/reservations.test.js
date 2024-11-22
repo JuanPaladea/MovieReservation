@@ -5,7 +5,7 @@ const app = "http://localhost:4000";
 const request = supertest(app);
 
 let token
-let hallId
+let reservationId
 
 beforeAll(async () => {
   const response = await request
@@ -17,56 +17,61 @@ beforeAll(async () => {
   token = response.body.data.token
 });
 
-describe('Halls', () => {
-  it('should return a list of halls', async () => {
+describe('Reservations', () => {
+  it('should return a list of reservations', async () => {
     const response = await request
-      .get('/api/halls')
+      .get('/api/reservations')
       .set('Authorization', `Bearer ${token}`)
 
     expect(response.status).toBe(200);
     expect(response.body.data).toBeDefined()
   });
-
-  it('should return a hall by id', async () => {
+  
+  it('should add a reservation', async () => {
     const response = await request
-      .get('/api/halls/1')
-      .set('Authorization', `Bearer ${token}`)
-
-    expect(response.status).toBe(200);
-    expect(response.body.data).toBeDefined()
-  });
-
-  it('should add a hall', async () => {
-    const response = await request
-      .post('/api/halls')
+      .post('/api/reservations')
       .set('Authorization', `Bearer ${token}`)
       .send({
-        name: faker.lorem.words(),
-        total_rows: faker.number.int(10),
-        seats_per_row: faker.number.int(10)
+        seatIds: [9050],
       })
-    hallId = response.body.data.hall_id
+
+    reservationId = response.body.data[0].reservation_id
     expect(response.status).toBe(201);
     expect(response.body.data).toBeDefined()
   });
 
-  it("should update a hall", async () => {
+  it('should return a reservation by id', async () => {
     const response = await request
-      .put(`/api/halls/${hallId}`)
+      .get(`/api/reservations/${reservationId}`)
       .set('Authorization', `Bearer ${token}`)
-      .send({
-        name: faker.lorem.words(),
-        total_rows: faker.number.int(10),
-        seats_per_row: faker.number.int(10)
-      })
-    });
 
-  it('should delete a hall', async () => {
-    const response = await request
-      .delete(`/api/halls/${hallId}`)
-      .set('Authorization', `Bearer ${token}`)
-      
     expect(response.status).toBe(200);
     expect(response.body.data).toBeDefined()
+  });
+  
+  it('should return a list of user reservations', async () => {
+    const response = await request
+      .get('/api/reservations/user/7')
+      .set('Authorization', `Bearer ${token}`)
+
+    expect(response.status).toBe(200);
+    expect(response.body.data).toBeDefined()
+  });
+
+  it('should return a list of showtime reservations', async () => {
+    const response = await request
+      .get('/api/reservations/showtime/136')
+      .set('Authorization', `Bearer ${token}`)
+
+    expect(response.status).toBe(200);
+    expect(response.body.data).toBeDefined()
+  });
+
+  it('should delete a reservation', async () => {
+    const response = await request
+      .delete(`/api/reservations/${reservationId}`)
+      .set('Authorization', `Bearer ${token}`)
+
+    expect(response.status).toBe(200);
   });
 });

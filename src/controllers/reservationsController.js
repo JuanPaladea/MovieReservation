@@ -20,7 +20,7 @@ const addReservation = async (req, res) => {
       // check availability
       const isAvailable = await seatsService.checkSeatAvailability(seatId);
       if (!isAvailable) {
-        return res.status(400).send({status: 'error', message: `Seat ${seatNumber} is already reserved`});
+        return res.status(400).send({status: 'error', message: `Seat ${seatId} is already reserved`});
       }
     }
 

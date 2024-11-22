@@ -11,6 +11,7 @@ const apiReservationsRouter = require('./routes/apiReservations.router');
 const apiShowtimesRouter = require('./routes/apiShowtimes.router');
 const apiSeatsRouter = require('./routes/apiSeats.router');
 const apiHallsRouter = require('./routes/apiHalls.router');
+const apiPaymentsRouter = require('./routes/apiPayments.router');
 
 const app = express();
 
@@ -59,6 +60,7 @@ app.use('/api/reservations', apiReservationsRouter)
 app.use('/api/showtimes', apiShowtimesRouter)
 app.use('/api/seats', apiSeatsRouter)
 app.use('/api/halls', apiHallsRouter)
+app.use('/api/payments', apiPaymentsRouter)
 
 app.use('/', (req, res) => {
   res.redirect('/api-docs');

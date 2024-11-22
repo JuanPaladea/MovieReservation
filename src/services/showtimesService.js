@@ -29,7 +29,7 @@ class ShowtimesService {
       const { total_rows, seats_per_row } = hall;
 
       // Step 2: Insert the new showtime
-      const result = await pool.query('INSERT INTO showtimes (movie_id, hall_id, show_date, show_time, price) VALUES ($1, $2, $3, $4. $5) RETURNING *', [movieId, hallId, show_date, show_time, price]);
+      const result = await pool.query('INSERT INTO showtimes (movie_id, hall_id, show_date, show_time, price) VALUES ($1, $2, $3, $4, $5) RETURNING *', [movieId, hallId, show_date, show_time, price]);
 
       // Step 3: Insert seats for the showtime
       for (let row = 1; row <= total_rows; row++) {

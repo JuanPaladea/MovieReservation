@@ -20,7 +20,7 @@ describe('Session', () => {
 
     userId = response.body.data.user_id
     expect(response.status).toBe(201);
-    expect(response.body.status).toBe('success');
+    expect(response.body.data).toBeDefined()
   });
 
   it("should try to register a user with an invalid email", async () => {
@@ -67,7 +67,7 @@ describe('Session', () => {
         password: "Test1234"})
     
     expect(response.status).toBe(200);
-    expect(response.body.status).toBe('success');
+    expect(response.body.data).toBeDefined()
   });
 
   it('should try to login a user with an invalid email', async () => {
@@ -116,6 +116,6 @@ describe('Session', () => {
       .set('Authorization', `Bearer ${token}`)
 
     expect(response.status).toBe(200);
-    expect(response.body.status).toBe('success');
+    expect(response.body.message).toBe("User deleted successfully");
   });
 })

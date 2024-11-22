@@ -48,7 +48,6 @@ const getUpcomingMovieShowtimes = async (req, res) => {
 
 const addShowtime = async (req, res) => {
   const { movieId, hallId, showDate, showTime, price} = req.body;
-
   try {
     const result = await showtimesService.addShowtime(movieId, hallId, showDate, showTime, price);
     res.status(201).send({status: 'success', data: result});

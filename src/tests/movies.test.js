@@ -24,7 +24,7 @@ describe('Movies', () => {
       .set('Authorization', `Bearer ${token}`)
 
     expect(response.status).toBe(200);
-    expect(response.body.status).toBe('success');
+    expect(response.body.data).toBeDefined()
   });
 
   it('should return a movie by id', async () => {
@@ -33,7 +33,7 @@ describe('Movies', () => {
       .set('Authorization', `Bearer ${token}`)
 
     expect(response.status).toBe(200);
-    expect(response.body.status).toBe('success');
+    expect(response.body.data).toBeDefined()
   });
 
   it('should add a movie', async () => {
@@ -52,7 +52,7 @@ describe('Movies', () => {
 
     movieId = response.body.data.movie_id
     expect(response.status).toBe(201);
-    expect(response.body.status).toBe('success');
+    expect(response.body.data).toBeDefined()
   });
 
   it('should delete a movie', async () => {
@@ -61,6 +61,6 @@ describe('Movies', () => {
       .set('Authorization', `Bearer ${token}`)
 
     expect(response.status).toBe(200);
-    expect(response.body.status).toBe('success');
+    expect(response.body.data).toBeDefined()
   });
 })

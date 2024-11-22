@@ -25,7 +25,9 @@ class reservationsService {
       );
       await Promise.all(updatePromises);
 
-      return result;
+      const reservations = result.map(res => res.rows[0]);
+
+      return reservations;
     } catch (error) {
       console.error(error);
       throw error;
