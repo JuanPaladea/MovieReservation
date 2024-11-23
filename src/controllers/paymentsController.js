@@ -12,10 +12,10 @@ const getPayments = async (req, res) => {
 
 const addPayment = async (req, res) => {
   const userId = req.user.id;
-  const { amount, paymentMethod, paymentStatus, reservationIds } = req.body;
+  const { amount, paymentMethod, paymentStatus, transactionId, reservationIds } = req.body;
 
   try {
-    const result = await paymentsService.addPayment(userId, amount, paymentMethod, paymentStatus, reservationIds);
+    const result = await paymentsService.addPayment(userId, amount, paymentMethod, paymentStatus, transactionId, reservationIds);
     res.status(201).send({status: 'success', data: result});
   } catch (error) {
     console.error(error);

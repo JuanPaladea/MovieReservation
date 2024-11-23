@@ -75,6 +75,7 @@ describe('Reservations', () => {
         amount: 100,
         paymentMethod: 'cash',
         paymentStatus: 'completed',
+        transactionId: '1234',
         reservationIds: [reservationId]
       })
 

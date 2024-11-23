@@ -4,6 +4,7 @@ const session = require('express-session');
 const swaggerJSDoc = require('swagger-jsdoc');
 const swaggerUi = require('swagger-ui-express');
 const path = require('path')
+const cors = require('cors');
 
 const apiMoviesRouter = require('./routes/apiMovies.router');
 const apiSessionRouter = require('./routes/apiSession.router');
@@ -12,11 +13,16 @@ const apiShowtimesRouter = require('./routes/apiShowtimes.router');
 const apiSeatsRouter = require('./routes/apiSeats.router');
 const apiHallsRouter = require('./routes/apiHalls.router');
 const apiPaymentsRouter = require('./routes/apiPayments.router');
+const limiter = require('./utils/limiter');
+const cookieParser = require('cookie-parser');
 
 const app = express();
 
+app.use(cors());
+app.use(limiter);
 app.use(express.json());
 app.use(express.urlencoded({ extended: true }));
+app.use(cookieParser());
 
 app.use(
 	session({
@@ -53,6 +59,7 @@ const swaggerOptions = {
 };
 
 const swaggerSpec = swaggerJSDoc(swaggerOptions);
+
 app.use('/api-docs', swaggerUi.serve, swaggerUi.setup(swaggerSpec));
 app.use('/api/movies', apiMoviesRouter)
 app.use('/api/session', apiSessionRouter)

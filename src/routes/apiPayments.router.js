@@ -1,4 +1,4 @@
-const { getPayments, addPayment, getPaymentById, updatePayment, deletePayment, getPaymentReservations } = require('../controllers/paymentsController');
+const { getPayments, addPayment, getPaymentById, deletePayment, getPaymentReservations } = require('../controllers/paymentsController');
 const adminAuth = require('../middlewares/adminAuth');
 const authToken = require('../middlewares/authToken');
 const router = require('express').Router();

@@ -1,7 +1,7 @@
 const pool = require('../db');
 
 class PaymentsService {
-  async addPayment(userId, amount, paymentMethod, paymentStatus, reservationIds) {
+  async addPayment(userId, amount, paymentMethod, paymentStatus, transactionId, reservationIds) {
     try {
       const reservations = await pool.query('SELECT * FROM reservations WHERE user_id = $1 AND reservation_id = ANY($2)', [userId, reservationIds]);
       reservations.rows.map((reservation) => {
@@ -10,7 +10,7 @@ class PaymentsService {
         }
       });
 
-      const paymentResult = await pool.query('INSERT INTO payments (amount, payment_method, payment_status) VALUES ($1, $2, $3) RETURNING *', [amount, paymentMethod, paymentStatus]);
+      const paymentResult = await pool.query('INSERT INTO payments (amount, payment_method, payment_status, transaction_id) VALUES ($1, $2, $3, $4) RETURNING *', [amount, paymentMethod, paymentStatus, transactionId]);
 
       const paymentId = paymentResult.rows[0].payment_id;
 
