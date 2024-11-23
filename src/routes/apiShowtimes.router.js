@@ -4,11 +4,11 @@ const authToken = require('../middlewares/authToken');
 
 const router = require('express').Router();
 
-router.get('/', authToken, getShowtimes);
+router.get('/', getShowtimes);
 router.post('/', authToken, adminAuth, addShowtime);
-router.get('/:showtimeId', authToken, getShowtimeById);
+router.get('/:showtimeId', getShowtimeById);
 router.delete('/:showtimeId', authToken, adminAuth, deleteShowtime);
-router.get('/movie/:movieId', authToken, getMovieShowtimes);
-router.get('/upcoming/:movieId', authToken, getUpcomingMovieShowtimes);
+router.get('/movie/:movieId', getMovieShowtimes);
+router.get('/upcoming/:movieId', getUpcomingMovieShowtimes);
 
 module.exports = router;

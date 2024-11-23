@@ -9,6 +9,6 @@ router.post('/', authToken, addReservation);
 router.get('/:reservationId', authToken, getReservationById);
 router.delete('/:reservationId', authToken, adminAuth, deleteReservation);
 router.get('/user/:userId', authToken, getUserReservations);
-router.get('/showtime/:showtimeId', authToken, getShowtimeReservations);
+router.get('/showtime/:showtimeId', authToken, adminAuth, getShowtimeReservations);
 
 module.exports = router;

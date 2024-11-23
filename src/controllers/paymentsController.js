@@ -34,18 +34,6 @@ const getPaymentById = async (req, res) => {
   }
 }
 
-const deletePayment = async (req, res) => {
-  const { id } = req.params;
-
-  try {
-    const payment = await paymentsService.deletePayment(id);
-    res.status(200).send({status: 'success', data: payment});
-  } catch (error) {
-    console.error(error);
-    res.status(500).send({status: 'error', message: error.message});
-  }
-}
-
 const updatePayment = async (req, res) => {
   const { id } = req.params;
   const { amount, paymentMethod, paymentStatus } = req.body;
@@ -75,7 +63,6 @@ module.exports = {
   getPayments,
   addPayment,
   getPaymentById,
-  deletePayment,
   updatePayment,
   getPaymentReservations
 };

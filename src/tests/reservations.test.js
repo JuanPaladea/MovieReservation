@@ -32,7 +32,7 @@ describe('Reservations', () => {
       .post('/api/reservations')
       .set('Authorization', `Bearer ${token}`)
       .send({
-        seatIds: [9050],
+        seatIds: [9051],
       })
 
     reservationId = response.body.data[0].reservation_id
