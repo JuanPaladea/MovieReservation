@@ -49,7 +49,7 @@ const getReservationById = async (req, res) => {
 }
 
 const getUserReservations = async (req, res) => {
-  const userId = req.params.userId;
+  const userId = req.user.id;
 
   try {
     const result = await reservationsService.getUserReservations(userId);
@@ -73,10 +73,11 @@ const getShowtimeReservations = async (req, res) => {
 }
 
 const deleteReservation = async (req, res) => {
+  const userId = req.user.id;
   const reservationId = req.params.reservationId;
 
   try {
-    const result = await reservationsService.deleteReservation(reservationId);
+    const result = await reservationsService.deleteReservation(userId, reservationId);
     res.status(200).send({status: 'success', data: result});
   } catch (error) {
     console.error(error);

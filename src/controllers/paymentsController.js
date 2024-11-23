@@ -11,10 +11,11 @@ const getPayments = async (req, res) => {
 }
 
 const addPayment = async (req, res) => {
+  const userId = req.user.id;
   const { amount, paymentMethod, paymentStatus, reservationIds } = req.body;
 
   try {
-    const result = await paymentsService.addPayment(amount, paymentMethod, paymentStatus, reservationIds);
+    const result = await paymentsService.addPayment(userId, amount, paymentMethod, paymentStatus, reservationIds);
     res.status(201).send({status: 'success', data: result});
   } catch (error) {
     console.error(error);
@@ -34,12 +35,11 @@ const getPaymentById = async (req, res) => {
   }
 }
 
-const updatePayment = async (req, res) => {
+const deletePayment = async (req, res) => {
   const { id } = req.params;
-  const { amount, paymentMethod, paymentStatus } = req.body;
 
   try {
-    const payment = await paymentsService.updatePayment(id, amount, paymentMethod, paymentStatus);
+    const payment = await paymentsService.deletePayment(id);
     res.status(200).send({status: 'success', data: payment});
   } catch (error) {
     console.error(error);
@@ -51,7 +51,7 @@ const getPaymentReservations = async (req, res) => {
   const { id } = req.params;
 
   try {
-    const paymentReservations = await paymentsService.getPaymentReservations(id);
+    const paymentReservations = await paymentsService.getPaymentAndReservations(id);
     res.status(200).send({status: 'success', data: paymentReservations});
   } catch (error) {
     console.error(error);
@@ -63,6 +63,6 @@ module.exports = {
   getPayments,
   addPayment,
   getPaymentById,
-  updatePayment,
+  deletePayment,
   getPaymentReservations
 };

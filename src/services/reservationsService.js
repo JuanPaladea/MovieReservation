@@ -54,8 +54,14 @@ class reservationsService {
     }
   }  
 
-  async deleteReservation(reservationId) {
+  async deleteReservation(userId, reservationId) {    
     try {
+      const userReservation = await pool.query('SELECT * FROM reservations WHERE reservation_id = $1', [reservationId]);
+
+      if (userReservation.rows[0].user_id !== userId) {
+        throw new Error('Unauthorized, reservation does not belong to user');
+      }
+
       // Delete reservation
       const result = await pool.query('UPDATE reservations SET status = $1 WHERE reservation_id = $2 RETURNING *', ['canceled', reservationId]);
 
