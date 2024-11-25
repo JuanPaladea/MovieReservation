@@ -55,6 +55,24 @@ describe('Movies', () => {
     expect(response.body.data).toBeDefined()
   });
 
+  it('should update a movie', async () => {
+    const response = await request
+      .put(`/api/movies/${movieId}`)
+      .set('Authorization', `Bearer ${token}`)
+      .send({
+        title: faker.lorem.words(),
+        genre: faker.lorem.word(),
+        duration: faker.number.int(200),
+        rating: faker.number.int(100),
+        description: faker.lorem.sentence(),
+        release_date: faker.date.recent(),
+        thumnails: faker.image.url()
+      })
+
+    expect(response.status).toBe(200);
+    expect(response.body.data).toBeDefined()
+  });
+
   it('should delete a movie', async () => {
     const response = await request
       .delete(`/api/movies/${movieId}`)

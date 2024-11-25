@@ -66,6 +66,9 @@ paths:
                 description:
                   type: string
                   description: The description of the movie
+                thumbnails:
+                  type: string
+                  description: The thumbnails of the movie
       responses:
         '201':
           description: A movie
@@ -100,6 +103,68 @@ paths:
           description: The ID of the movie
           schema:
             type: integer
+      responses:
+        '200':
+          description: A movie
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  status:
+                    type: string
+                    description: The status of the response
+                  data:
+                    type: object
+                    description: The data of the response
+        '401':
+          description: Unauthorized
+        '403':
+          description: Forbidden
+        '404':
+          description: Not Found
+        '500':
+          description: Internal Server Error
+    put:
+      tags:
+        - Movies
+      summary: Update a movie by ID
+      parameters:
+        - name: id
+          in: path
+          required: true
+          description: The ID of the movie
+          schema:
+            type: integer
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                title:
+                  type: string
+                  description: The title of the movie
+                genre:
+                  type: string
+                  description: The genre of the movie
+                duration:
+                  type: integer
+                  description: The duration of the movie in minutes
+                rating:
+                  type: string
+                  description: The rating of the movie
+                release_date:
+                  type: string
+                  format: date
+                  description: The release date of the movie
+                description:
+                  type: string
+                  description: The description of the movie
+                thumbnails:
+                  type: string
+                  description: The thumbnails of the movie
       responses:
         '200':
           description: A movie

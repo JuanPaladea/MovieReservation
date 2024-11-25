@@ -34,6 +34,19 @@ const getMovieById = async (req, res) => {
   }
 }
 
+const updateMovie = async (req, res) => {
+  const { id } = req.params;
+  const { title, genre, duration, rating, release_date, description, thumbnails} = req.body;
+
+  try {
+    const movie = await moviesService.updateMovie(id, title, genre, duration, rating, description, release_date, thumbnails);
+    res.status(200).send({status: 'success', data: movie});
+  } catch (error) {
+    console.error(error);
+    res.status(500).send({status: 'error', message: error.message});
+  }
+}
+
 const deleteMovie = async (req, res) => {
   const { id } = req.params;
 
@@ -50,5 +63,6 @@ module.exports = {
   getMovies,
   getMovieById,
   addMovie,
+  updateMovie,
   deleteMovie
 };

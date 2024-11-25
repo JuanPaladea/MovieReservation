@@ -31,6 +31,16 @@ class MoviesService {
     }
   }
 
+  async updateMovie(id, title, genre, duration, rating, description, release_date, thumbnails) {
+    try {
+      const result = await pool.query('UPDATE movies SET title = $1, genre = $2, duration = $3, rating = $4, description = $5, release_date = $6, thumbnails = $7 WHERE movie_id = $8 RETURNING *', [title, genre, duration, rating, description, release_date, thumbnails, id]);
+      return result.rows[0];
+    } catch (error) {
+      console.error(error);
+      throw error;
+    }
+  }
+
   async deleteMovie(id) {
     try {
       const result = await pool.query('DELETE FROM movies WHERE movie_id = $1 RETURNING *', [id]);
