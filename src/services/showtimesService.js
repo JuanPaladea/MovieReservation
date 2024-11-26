@@ -1,9 +1,10 @@
 const pool = require('../db');
 
 class ShowtimesService {
-  async getShowtimes() {
+  async getShowtimes(page, size) {
     try {
-      const result = await pool.query('SELECT * FROM showtimes');
+      const offset = (page - 1) * size;
+      const result = await pool.query('SELECT * FROM showtimes ORDER BY show_date ASC, show_time ASC LIMIT $1 OFFSET $2', [size, offset]);
       return result.rows;
     } catch (error) {
       console.error(error);
@@ -54,9 +55,10 @@ class ShowtimesService {
     }
   }
 
-  async getMovieShowtimes(movieId) {
+  async getMovieShowtimes(movieId, page, size) {
     try {
-      const result = await pool.query('SELECT * FROM showtimes WHERE movie_id = $1 ORDER BY show_date ASC', [movieId]);
+      const offset = (page - 1) * size;
+      const result = await pool.query('SELECT * FROM showtimes WHERE movie_id = $1 ORDER BY show_date ASC, show_time ASC LIMIT $2 OFFSET $3', [movieId, size, offset]);
       return result.rows;
     } catch (error) {
       console.error(error);
@@ -64,9 +66,10 @@ class ShowtimesService {
     }
   }
 
-  async getUpcomingMovieShowtimes(movieId) {
+  async getUpcomingMovieShowtimes(movieId, page, size) {
     try {
-      const result = await pool.query('SELECT * FROM showtimes WHERE movie_id = $1 AND show_date >= CURRENT_DATE ORDER BY show_date ASC', [movieId]);
+      const offset = (page - 1) * size;
+      const result = await pool.query('SELECT * FROM showtimes WHERE movie_id = $1 AND show_date >= CURRENT_DATE ORDER BY show_date ASC, show_time ASC LIMIT $2 OFFSET $3', [movieId, size, offset]);
       return result.rows;
     } catch (error) {
       console.error(error);

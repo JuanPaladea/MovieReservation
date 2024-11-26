@@ -2,8 +2,10 @@ const reservationsService = require('../services/reservationsService');
 const seatsService = require('../services/seatsService');
 
 const getReservations = async (req, res) => {
+  const { page = 1, size = 10 } = req.query;
+
   try {
-    const result = await reservationsService.getReservations();
+    const result = await reservationsService.getReservations(page, size);
     res.status(200).send({status: 'success', data: result});
   } catch (error) {
     console.error(error);
@@ -50,9 +52,10 @@ const getReservationById = async (req, res) => {
 
 const getUserReservations = async (req, res) => {
   const userId = req.user.id;
+  const { page = 1, size = 10 } = req.query;
 
   try {
-    const result = await reservationsService.getUserReservations(userId);
+    const result = await reservationsService.getUserReservations(userId, page, size);
     res.status(200).send({status: 'success', data: result});
   } catch (error) {
     console.error(error);
@@ -62,9 +65,10 @@ const getUserReservations = async (req, res) => {
 
 const getShowtimeReservations = async (req, res) => {
   const showtimeId = req.params.showtimeId;
+  const { page = 1, size = 10 } = req.query;
 
   try {
-    const result = await reservationsService.getShowtimeReservations(showtimeId);
+    const result = await reservationsService.getShowtimeReservations(showtimeId, page, size);
     res.status(200).send({status: 'success', data: result});
   } catch (error) {
     console.error(error);

@@ -1,9 +1,10 @@
 const pool = require('../db');
 
 class MoviesService {
-  async getMovies() {
+  async getMovies(page, size) {
     try {
-      const movies = await pool.query('SELECT * FROM movies');
+      const offset = (page - 1) * size;
+      const movies = await pool.query('SELECT * FROM movies ORDER BY movie_id LIMIT $1 OFFSET $2', [size, offset]);
       return movies.rows;
     } catch (error) {
       console.error(error);

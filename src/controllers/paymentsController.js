@@ -1,8 +1,10 @@
 const paymentsService = require('../services/paymentsService');
 
 const getPayments = async (req, res) => {
+  const { page = 1, size = 10 } = req.query;
+  
   try {
-    const payments = await paymentsService.getPayments();
+    const payments = await paymentsService.getPayments(page, size);
     res.status(200).send({status: 'success', data: payments});
   } catch (error) {
     console.error(error);

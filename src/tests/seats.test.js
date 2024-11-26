@@ -23,26 +23,6 @@ describe('Seats', () => {
     expect(response.status).toBe(200)
     expect(response.body.data).toBeDefined()
   });
-  
-  it('should update seat status', async () => {
-    const response = await request
-      .put('/api/seats/9050')
-      .set('Authorization', `Bearer ${token}`)
-      .send({
-        status: "reserved"
-      })
-    expect(response.status).toBe(200)
-    expect(response.body.data).toBeDefined()
-
-    const response2 = await request
-      .put('/api/seats/9050')
-      .set('Authorization', `Bearer ${token}`)
-      .send({
-        status: "available"
-      })
-    expect(response2.status).toBe(200)
-    expect(response2.body.data).toBeDefined()
-  });
 
   it('should get all seats for a showtime', async () => {
     const response = await request

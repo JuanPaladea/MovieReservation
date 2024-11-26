@@ -39,9 +39,10 @@ class PaymentsService {
     }
   }
 
-  async getPayments() {
+  async getPayments(page, size) {
     try {
-      const payments = await pool.query('SELECT * FROM payments');
+      const offset = (page - 1) * size;
+      const payments = await pool.query('SELECT * FROM payments ORDER BY payment_id DESC LIMIT $1 OFFSET $2', [size, offset]);
       return payments.rows;
     } catch (error) {
       console.error(error);

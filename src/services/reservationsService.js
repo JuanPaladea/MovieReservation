@@ -1,9 +1,10 @@
 const pool = require('../db')
 
 class reservationsService {
-  async getReservations() {
+  async getReservations(page, size) {
     try {
-      const result = await pool.query('SELECT * FROM reservations ORDER BY reservation_date ASC');
+      const offset = (page - 1) * size;
+      const result = await pool.query('SELECT * FROM reservations ORDER BY reservation_date ASC LIMIT $1 OFFSET $2', [size, offset]);
       return result.rows;
     } catch (error) {
       console.error(error);
@@ -44,9 +45,10 @@ class reservationsService {
     }
   }
   
-  async getUserReservations(userId) {
+  async getUserReservations(userId, page, size) {
     try {
-      const result = await pool.query('SELECT * FROM reservations WHERE user_id = $1 ORDER BY reservation_date ASC', [userId]);
+      const offset = (page - 1) * size;
+      const result = await pool.query('SELECT * FROM reservations WHERE user_id = $1 ORDER BY reservation_date ASC LIMIT $2 OFFSET $3', [userId, size, offset]);
       return result.rows;
     } catch (error) {
       console.error(error);
@@ -83,9 +85,10 @@ class reservationsService {
     }
   }
 
-  async getShowtimeReservations(showtimeId) {
+  async getShowtimeReservations(showtimeId, page, size) {
     try {
-      const result = await pool.query('SELECT reservations.*, seats.*, showtimes.* FROM reservations JOIN seats ON reservations.seat_id = seats.seat_id JOIN showtimes ON seats.showtime_id = showtimes.showtime_id WHERE seats.showtime_id = $1;', [showtimeId]);
+      const offset = (page - 1) * size;
+      const result = await pool.query('SELECT reservations.*, seats.*, showtimes.* FROM reservations JOIN seats ON reservations.seat_id = seats.seat_id JOIN showtimes ON seats.showtime_id = showtimes.showtime_id WHERE seats.showtime_id = $1 ORDER BY reservation_date ASC LIMIT $2 OFFSET $3', [showtimeId, size, offset]); 
       return result.rows;
     } catch (error) {
       console.error(error);

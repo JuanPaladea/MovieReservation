@@ -13,9 +13,10 @@ const getSeatById = async (req, res) => {
 
 const getSeatsForShowtime = async (req, res) => {
   const { showtimeId } = req.params;
+  const { page = 1, size = 10 } = req.query;
 
   try {
-    const seats = await seatsService.getSeatsForShowtime(showtimeId);
+    const seats = await seatsService.getSeatsForShowtime(showtimeId, page, size);
     res.status(200).json({ status: 'success', data: seats });
   } catch (error) {
     res.status(500).json({ error: error.message });
@@ -33,21 +34,8 @@ const checkSeatAvailability = async (req, res) => {
   }
 }
 
-const updateSeatStatus = async (req, res) => {
-  const { seatId } = req.params;
-  const { status } = req.body;
-
-  try {
-    const result = await seatsService.updateSeatStatus(seatId, status);
-    res.status(200).json({ status: 'success', data: result });
-  } catch (error) {
-    res.status(500).json({ error: error.message });
-  }
-}
-
 module.exports = {
   getSeatById,
   getSeatsForShowtime,
   checkSeatAvailability,
-  updateSeatStatus
 };

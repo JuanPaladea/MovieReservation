@@ -1,8 +1,11 @@
 const hallService = require('../services/hallsService');
 
 const getHalls = async (req, res) => {
+  // page and size with default values
+  const { page = 1, size = 10 } = req.query;
+
   try {
-    const halls = await hallService.getHalls();
+    const halls = await hallService.getHalls(page, size);
     res.status(200).send({ status: 'success', data: halls });
   } catch (error) {
     res.status(500).json({ error: error.message });

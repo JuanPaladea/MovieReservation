@@ -1,8 +1,10 @@
 const showtimesService = require('../services/showtimesService');
 
 const getShowtimes = async (req, res) => {
+  const { page = 1, size = 10 } = req.query;
+
   try {
-    const result = await showtimesService.getShowtimes();
+    const result = await showtimesService.getShowtimes(page, size);
     res.status(200).send({status: 'success', data: result});
   } catch (error) {
     console.error(error);
@@ -24,9 +26,10 @@ const getShowtimeById = async (req, res) => {
 
 const getMovieShowtimes = async (req, res) => {
   const { movieId } = req.params;
+  const { page = 1, size = 10 } = req.query;
 
   try {
-    const result = await showtimesService.getMovieShowtimes(movieId);
+    const result = await showtimesService.getMovieShowtimes(movieId, page, size);
     res.status(200).send({status: 'success', data: result});
   } catch (error) {
     console.error(error);
@@ -36,9 +39,10 @@ const getMovieShowtimes = async (req, res) => {
 
 const getUpcomingMovieShowtimes = async (req, res) => {
   const { movieId } = req.params;
+  const { page = 1, size = 10 } = req.query;
 
   try {
-    const result = await showtimesService.getUpcomingMovieShowtimes(movieId);
+    const result = await showtimesService.getUpcomingMovieShowtimes(movieId, page, size);
     res.status(200).send({status: 'success', data: result});
   } catch (error) {
     console.error(error);

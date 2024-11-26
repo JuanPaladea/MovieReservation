@@ -1,9 +1,10 @@
 const pool = require('../db')
 
 class hallsService {
-  async getHalls() {
+  async getHalls(page, size) {
     try {
-      const result = await pool.query('SELECT * FROM halls ORDER BY hall_id ASC');
+      const offset = (page - 1) * size;
+      const result = await pool.query('SELECT * FROM halls ORDER BY hall_id ASC LIMIT $1 OFFSET $2', [size, offset]);
       return result.rows;
     } catch (error) {
       console.error(error);
