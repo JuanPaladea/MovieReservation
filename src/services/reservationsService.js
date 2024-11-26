@@ -92,6 +92,16 @@ class reservationsService {
       throw error;
     }
   }
+
+  async getReservationBySeatId(seatId) {
+    try {
+      const result = await pool.query('SELECT * FROM reservations WHERE seat_id = $1', [seatId]);
+      return result.rows[0];
+    } catch (error) {
+      console.error(error);
+      throw error;
+    }
+  }
 }
 
 module.exports = new reservationsService();

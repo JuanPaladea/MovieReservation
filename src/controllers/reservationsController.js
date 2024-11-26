@@ -72,6 +72,18 @@ const getShowtimeReservations = async (req, res) => {
   }
 }
 
+const getReservationBySeatId = async (req, res) => {
+  const seatId = req.params.seatId;
+
+  try {
+    const result = await reservationsService.getReservationBySeatId(seatId);
+    res.status(200).send({status: 'success', data: result});
+  } catch (error) {
+    console.error(error);
+    res.status(500).send({status: 'error', message: error.message});
+  }
+}
+
 const deleteReservation = async (req, res) => {
   const userId = req.user.id;
   const reservationId = req.params.reservationId;
@@ -91,5 +103,6 @@ module.exports = {
   getReservationById,
   getUserReservations,
   getShowtimeReservations,
+  getReservationBySeatId,
   deleteReservation,
 };

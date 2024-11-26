@@ -32,7 +32,7 @@ describe('Reservations', () => {
       .post('/api/reservations')
       .set('Authorization', `Bearer ${token}`)
       .send({
-        seatIds: [9057],
+        seatIds: [9058],
       })
 
     reservationId = response.body.data[0].reservation_id
@@ -61,6 +61,15 @@ describe('Reservations', () => {
   it('should return a list of showtime reservations', async () => {
     const response = await request
       .get('/api/reservations/showtime/136')
+      .set('Authorization', `Bearer ${token}`)
+
+    expect(response.status).toBe(200);
+    expect(response.body.data).toBeDefined()
+  });
+
+  it('should return a reservation by seat id', async () => {
+    const response = await request
+      .get('/api/reservations/showtime/seat/9058')
       .set('Authorization', `Bearer ${token}`)
 
     expect(response.status).toBe(200);
