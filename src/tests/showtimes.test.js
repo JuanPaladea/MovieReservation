@@ -43,7 +43,7 @@ describe('Showtimes', () => {
       .post('/api/showtimes')
       .set('Authorization', `Bearer ${token}`)
       .send({
-        movieId: faker.number.int(15),
+        movieId: 5,
         hallId: hallId,
         showDate: faker.date.recent(),
         showTime: "18:00:00",
