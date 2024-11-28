@@ -28,8 +28,11 @@ const registerUser = async (req, res) => {
   const hashedPassword = await bcrypt.hash(password, 10);
 
   try {
-    const result = await sessionService.registeUser(username, email, hashedPassword);
-    res.status(201).send({status: 'success', data: result});
+    const user = await sessionService.registeUser(username, email, hashedPassword);
+    const token = jwt.sign({id: user.user_id, email: user.email, role: user.role}, process.env.JWT_SECRET, {expiresIn: '1h'});
+
+    res.cookie('token', token, {httpOnly: true});
+    res.status(201).send({status: 'success', data: {token}});
   } catch (error) {
     console.error(error);
     res.status(500).send({status: 'error', message: error.message});
@@ -78,10 +81,32 @@ const deleteUser = async (req, res) => {
     console.error(error);
     res.status(500).send({status: 'error', message: error.message});
   }
+} 
+
+const getUser = async (req, res) => {
+  const userId = req.user.id;
+
+  try {
+    const user = await sessionService.getUserById(userId);
+    if (!user) {
+      return res.status(404).send({status: 'error', message: 'User not found'});
+    }
+    res.status(200).send({status: 'success', data: {user: {id: user.user_id, username: user.username, email: user.email, role: user.role}}});
+  } catch (error) {
+    console.error(error);
+    res.status(500).send({status: 'error', message: error.message});
+  }
+}
+
+const logOut = (req, res) => {
+  res.clearCookie('token');
+  res.status(200).send({status: 'success', message: 'User logged out successfully'});
 }
 
 module.exports = {
   registerUser,
   loginUser,
-  deleteUser
+  getUser,
+  deleteUser,
+  logOut
 };

@@ -21,6 +21,16 @@ class SessionService {
     }
   }
 
+  async getUserById(userId) {
+    try {
+      const result = await pool.query('SELECT * FROM users WHERE user_id = $1', [userId]);
+      return result.rows[0];
+    } catch (error) {
+      console.error(error);
+      throw error;
+    }
+  }
+
   async deleteUser(userId) {
     try {
       const result = await pool.query('DELETE FROM users WHERE user_id = $1 RETURNING *', [userId]);
