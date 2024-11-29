@@ -13,10 +13,9 @@ const getSeatById = async (req, res) => {
 
 const getSeatsForShowtime = async (req, res) => {
   const { showtimeId } = req.params;
-  const { page = 1, size = 10 } = req.query;
 
   try {
-    const seats = await seatsService.getSeatsForShowtime(showtimeId, page, size);
+    const seats = await seatsService.getSeatsForShowtime(showtimeId);
     res.status(200).json({ status: 'success', data: seats });
   } catch (error) {
     res.status(500).json({ error: error.message });

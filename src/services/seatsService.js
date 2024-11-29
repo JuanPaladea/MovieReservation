@@ -11,10 +11,9 @@ class seatsService {
     }
   }
 
-  async getSeatsForShowtime(showtimeId, page, size) {
+  async getSeatsForShowtime(showtimeId) {
     try {
-      const offset = (page - 1) * size;
-      const result = await pool.query('SELECT * FROM seats WHERE showtime_id = $1 ORDER BY seat_id LIMIT $2 OFFSET $3', [showtimeId, size, offset]);
+      const result = await pool.query('SELECT * FROM seats WHERE showtime_id = $1 ORDER BY seat_id', [showtimeId]);
       return result.rows;
     } catch (error) {
       console.error(error);
