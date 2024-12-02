@@ -37,7 +37,8 @@ class reservationsService {
   
   async getReservationById(reservationId) {
     try {
-      const result = await pool.query('SELECT * FROM reservations WHERE reservation_id = $1', [reservationId]);
+      // Join reservations with seats trough seat_id; and users through user_id; and seat_id with showtimes trough showtime_id (in seats table) and movies trough movie_id (in showtimes table)
+      const result = await pool.query('SELECT reservations.*, seats.*, showtimes.*, movies.* FROM reservations JOIN seats ON reservations.seat_id = seats.seat_id JOIN showtimes ON seats.showtime_id = showtimes.showtime_id JOIN movies ON showtimes.movie_id = movies.movie_id WHERE reservation_id = $1', [reservationId]);
       return result.rows[0];
     } catch (error) {
       console.error(error);
