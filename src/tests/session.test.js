@@ -112,7 +112,7 @@ describe('Session', () => {
       .then(response => response.body.data.token)
        
     const response = await request
-      .delete(`/api/session/${userId}`)
+      .delete(`/api/session/delete/${userId}`)
       .set('Authorization', `Bearer ${token}`)
 
     expect(response.status).toBe(200);
