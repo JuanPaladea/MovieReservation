@@ -49,7 +49,7 @@ class reservationsService {
   async getUserReservations(userId, page, size) {
     try {
       const offset = (page - 1) * size;
-      const result = await pool.query('SELECT * FROM reservations WHERE user_id = $1 ORDER BY reservation_date ASC LIMIT $2 OFFSET $3', [userId, size, offset]);
+      const result = await pool.query('SELECT * FROM reservations WHERE user_id = $1 ORDER BY reservation_date DESC LIMIT $2 OFFSET $3', [userId, size, offset]);
       return result.rows;
     } catch (error) {
       console.error(error);
